@@ -4,6 +4,7 @@ public class RandomWalk {
     private int size;
     private int max;
     private int taken;
+    private int maxDistance;
 
     public RandomWalk(int size, int max) {
         x = 0;
@@ -11,6 +12,7 @@ public class RandomWalk {
         this.size = size;
         this.max = max;
         taken = 0;
+        maxDistance = 0;
     }
 
     public RandomWalk(int x, int y, int size, int max) {
@@ -19,6 +21,36 @@ public class RandomWalk {
         this.size = size;
         this.max = max;
         taken = 0;
+        maxDistance = 0;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getMaxDistance() {
+        return maxDistance;
+    }
+
+    public boolean moreSteps() {
+        return taken < max;
+    }
+
+    public boolean inBounds() {
+        return Math.abs(x) <= size && Math.abs(y) <= size;
+    }
+
+    private int max(int num1, int num2) {
+        if (num1 > num2) {
+            return num1;
+        }
+        else {
+            return num2;
+        }
     }
 
     public void takeStep() {
@@ -34,28 +66,17 @@ public class RandomWalk {
         }
 
         taken ++;
-    }
 
-    public boolean moreSteps() {
-        return taken < max;
-    }
-
-    public boolean inBounds() {
-        return Math.abs(x) <= size && Math.abs(y) <= size;
+        maxDistance = max(maxDistance, max(Math.abs(x), Math.abs(y)));
     }
 
     public void walk() {
-        while (taken < max) {
-            if (moreSteps() && inBounds()) {
-                takeStep();
-            }
-            else {
-                break;
-            }
+        while (moreSteps() && inBounds()) {
+            takeStep();
         }
     }
 
     public String toString() {
-        return String.format("Steps: %d; Position: (%d, %d)", taken, x, y);
+        return String.format("Steps: %d; Max Distance: %d; Position: (%d, %d)", taken, maxDistance, x, y);
     }
 }
